@@ -1,0 +1,39 @@
+<!-- views/recipes/new.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Recipe Sharing App - New Recipe</title>
+  <!-- Include necessary CSS and JS files -->
+  <link rel="stylesheet" type="text/css" href="/stylesheets/recipesNew.css">
+  <script src="/javascripts/scripts.js"></script>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div class="page-content">
+    <h1 class="new-recipe-header">Create New Recipe</h1>
+
+    <form action="/recipes" method="POST">
+      <div class="form-group">
+        <label for="recipeName">Recipe Name:</label>
+        <input type="text" id="recipeName" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="ingredients">Ingredients:</label>
+        <textarea id="ingredients" name="ingredients" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="instructions">Instructions:</label>
+        <textarea id="instructions" name="instructions" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="recipeImage">Image URL:</label>
+        <input type="text" id="recipeImage" name="image">
+      </div>
+      <button class="submit-button" type="submit">Create Recipe</button>
+    </form>
+  </div>
+</body>
+</html>

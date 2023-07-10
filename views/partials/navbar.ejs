@@ -1,0 +1,21 @@
+<nav class="navbar">
+    <div class="navbar-brand">
+      <a href="/">Recipe Sharing App</a>
+    </div>
+    <ul class="navbar-links">
+      <li>
+        <a class="navbar-button" href="/recipes/new">Create Recipe</a>
+      </li>
+      <% if (user) { %>
+        <li>
+          <form action="/logout" method="POST">
+            <button class="navbar-button" type="submit">Logout</button>
+          </form>
+        </li>
+      <% } else { %>
+        <li>
+          <a class="navbar-button" href="/auth/google">Log In</a>
+        </li>
+      <% } %>
+    </ul>
+</nav>

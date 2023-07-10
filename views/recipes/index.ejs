@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Recipe Sharing App - Recipes</title>
+  <!-- Include necessary CSS and JS files -->
+  <link rel="stylesheet" type="text/css" href="/stylesheets/recipesIndex.css">
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'recipes' }) %>
+
+  <div class="page-content">
+    <h1 class="recipes-header">Recipes</h1>
+  
+    <% if (recipes.length > 0) { %>
+      <div class="recipe-cards">
+        <% recipes.forEach(function(recipe) { %>
+          <div class="recipe-card">
+            <img src="<%= recipe.image %>" alt="<%= recipe.name %>">
+            <h3><%= recipe.name %></h3>
+            <a href="/recipes/<%= recipe._id %>">View Recipe</a>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No recipes found.</p>
+    <% } %>
+  </div>
+</body>
+</html>
