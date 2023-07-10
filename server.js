@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
+
 // session middleware
 const session = require('express-session');
 const passport = require('passport');
@@ -16,6 +17,7 @@ const app = express();
 
 // connect to the MongoDB with mongoose
 require('./config/database');
+
 // configure Passport
 require('./config/passport');
 
@@ -31,6 +33,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 // mount the session middleware
 app.use(session({
   secret: process.env.SECRET,
