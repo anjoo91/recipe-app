@@ -79,12 +79,18 @@ body {
 
 .buttons-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between; /* Updated property */
     margin-top: 20px;
 }
 
+.buttons-container > div {
+    display: flex;
+    align-items: center;
+}
+
 .reviews-button {
+    margin-right: 10px;
     padding: 10px 20px;
     font-size: 16px;
     background-color: #5DADE2;
@@ -94,14 +100,25 @@ body {
     cursor: pointer;
 }
 
-.reviews-button:hover {
+.questions-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #5DADE2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.reviews-button:hover,
+.questions-button:hover {
     background-color: #4CA1D2;
 }
+
 
 .edit-delete-buttons {
     display: flex;
     gap: 10px;
-    justify-self: end;
 }
 
 .edit-button {

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Question Forum - Question Details</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/questionsShow.css">
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'show' }) %>
+
+  <div class="page-content">
+    <h1 class="question-header"><%= question.question %></h1>
+    <% if (question.answer) { %>
+      <div class="answer">
+        <h3>Answer:</h3>
+        <p><%= question.answer %></p>
+      </div>
+    <% } else { %>
+      <% if (user && user._id.toString() === question.userId.toString()) { %>
+        <a class="answer-button" href="/recipes/<%= question.recipeId %>/questions/<%= question._id %>/answer">Answer</a>
+      <% } else { %>
+        <p>No answer yet.</p>
+      <% } %>
+    <% } %>
+  </div>
+</body>
+</html>

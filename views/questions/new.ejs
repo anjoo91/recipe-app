@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Question Forum - New Question</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/questionsNew.css">
+  <script src="/javascripts/scripts.js"></script>
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'new' }) %>
+
+  <div class="page-content">
+    <h1 class="new-question-header">Ask a New Question</h1>
+
+    <form action="/recipes/<%= recipe._id %>/questions" method="POST">
+      <div class="form-group">
+        <label for="question">Question:</label>
+        <textarea id="question" name="question" required></textarea>
+      </div>
+      <button class="submit-button" type="submit">Submit Question</button>
+    </form>
+  </div>
+</body>
+</html>

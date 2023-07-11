@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Question Forum - Questions</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/questionsIndex.css">
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'questions' }) %>
+
+  <div class="page-content">
+    <h1 class="questions-header">Questions</h1>
+
+    <% if (questions.length > 0) { %>
+      <div class="question-cards">
+        <% questions.forEach(function(question) { %>
+          <div class="question-card">
+            <a href="/recipes/<%= question.recipeId %>/questions/<%= question._id %>">
+              <h3><%= question.question %></h3>
+            </a>
+            <% if (question.answer) { %>
+              <p class="answer"><strong>Answer:</strong> <%= question.answer %></p>
+            <% } %>
+            <% if (user && user._id.toString() === question.userId.toString()) { %>
+              <div class="question-actions">
+                <form action="/recipes/<%= question.recipeId %>/questions/<%= question._id %>/edit" method="GET">
+                  <button class="edit-button" type="submit">Edit</button>
+                </form>
+                <form class="delete-form" action="/recipes/<%= question.recipeId %>/questions/<%= question._id %>?_method=DELETE" method="POST">
+                  <button class="delete-button" type="submit">Delete</button>
+                </form>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No questions found.</p>
+    <% } %>
+
+    <% if (!user) { %>
+      <div class="login-alert">
+        <p>Please <a href="/auth/google">log in</a> to ask or answer questions.</p>
+      </div>
+    <% } else { %>
+      <button class="create-question-button" onclick="location.href='/recipes/<%= recipe._id %>/questions/new'">Ask Question</button>
+    <% } %>
+  </div>
+</body>
+</html>

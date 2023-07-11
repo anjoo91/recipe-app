@@ -25,7 +25,10 @@
       </div>
     </div>
     <div class="buttons-container">
-      <a href="/recipes/<%= recipe._id %>/reviews" class="reviews-button">See Reviews</a>
+      <div>
+        <a href="/recipes/<%= recipe._id %>/reviews" class="reviews-button">See Reviews</a>
+        <a href="/recipes/<%= recipe._id %>/questions" class="questions-button">Questions & Answers</a>
+      </div>
       <div class="edit-delete-buttons">
         <a href="/recipes/<%= recipe._id %>/edit" class="edit-button">Edit Recipe</a>
         <form action="/recipes/<%= recipe._id %>?_method=DELETE" method="POST">

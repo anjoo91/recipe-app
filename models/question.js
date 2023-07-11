@@ -1,24 +1,29 @@
 const mongoose = require('mongoose');
 
-const questionSchema = new mongoose.Schema({
-  recipeId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Recipe',
-    required: true,
+const questionSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    recipeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Recipe',
+      required: true,
+    },
+    question: {
+      type: String,
+      required: true,
+    },
+    answer: {
+      type: String,
+      default: '',
+    },
   },
-  question: {
-    type: String,
-    required: true,
-  },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model('Question', questionSchema);

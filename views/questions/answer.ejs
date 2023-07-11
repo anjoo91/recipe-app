@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Question Forum - Answer Question</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/questionsAnswer.css">
+  <script src="/javascripts/scripts.js"></script>
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'answer' }) %>
+
+  <div class="page-content">
+    <h1 class="answer-question-header">Answer Question</h1>
+
+    <form action="/recipes/<%= question.recipeId %>/questions/<%= question._id %>/answer" method="POST">
+      <div class="form-group">
+        <label for="answer">Answer:</label>
+        <textarea id="answer" name="answer" required></textarea>
+      </div>
+      <button class="submit-button" type="submit">Submit Answer</button>
+    </form>
+  </div>
+</body>
+</html>

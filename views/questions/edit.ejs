@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Question Forum - Edit Question</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/questionsEdit.css">
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'questions' }) %>
+
+  <div class="page-content">
+    <h1 class="edit-question-header">Edit Question</h1>
+
+    <form action="/recipes/<%= question.recipeId %>/questions/<%= question._id %>" method="POST">
+      <div class="form-group">
+        <label for="question">Question:</label>
+        <textarea id="question" name="question" required><%= question.question %></textarea>
+      </div>
+      <button class="submit-button" type="submit">Update Question</button>
+    </form>
+  </div>
+</body>
+</html>
