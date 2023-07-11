@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Recipe Sharing App - Recipes</title>
-  <!-- Include necessary CSS and JS files -->
   <link rel="stylesheet" type="text/css" href="/stylesheets/recipesIndex.css">
 </head>
 <body>
@@ -11,7 +10,6 @@
 
   <div class="page-content">
     <h1 class="recipes-header">Recipes</h1>
-  
     <% if (recipes.length > 0) { %>
       <div class="recipe-cards">
         <% recipes.forEach(function(recipe) { %>
@@ -26,5 +24,18 @@
       <p>No recipes found.</p>
     <% } %>
   </div>
+
+  <script>
+    function getAverageRating(reviews) {
+      if (reviews.length === 0) {
+        return 'N/A';
+      }
+
+      const sum = reviews.reduce((total, review) => total + review.rating, 0);
+      const average = sum / reviews.length;
+
+      return average.toFixed(1);
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,144 @@
+/* CSS for NavBar */
+.navbar {
+    background-color: #f8f8f8;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+.navbar-brand a {
+    font-size: 20px;
+    color: #333;
+    text-decoration: none;
+}
+  
+.navbar-links li {
+    display: inline-block;
+}
+  
+.navbar-button {
+    display: inline-block;
+    background-color: #3498db;
+    color: #fff;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+  
+.navbar-button:hover {
+    background-color: #2980b9;
+}
+  
+.navbar-button[type="submit"] {
+    cursor: pointer;
+}
+
+/* Page content styles */
+.page-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+  
+/* Header styles */
+.reviews-header {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center; /* Center the header text */
+}
+  
+/* Review card styles */
+.review-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+}
+  
+.review-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+  
+.review-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+  
+.review-card p {
+    margin-bottom: 10px;
+}
+
+.review-actions {
+    display: flex;
+    justify-content: right;
+}
+
+.review-edit-button,
+.review-delete-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.review-edit-button {
+    background-color: #82E0AA;
+}
+
+.review-delete-button {
+    background-color: #E74C3C;
+}
+
+.review-edit-button:hover {
+    background-color: #6AC389;
+}
+
+.review-delete-button:hover {
+    background-color: #D43B2F;
+}
+
+.review-edit-button:focus,
+.review-delete-button:focus {
+  outline: none;
+}
+
+/* Create new review button styles */
+.create-review-button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+}
+  
+.create-review-button:hover {
+    background-color: #0056b3;
+}
+  
+.create-review-button:focus {
+    outline: none;
+}
+
+/* Alert styles */
+.alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }

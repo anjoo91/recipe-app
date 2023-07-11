@@ -3,9 +3,15 @@
       <a href="/">Recipe Sharing App</a>
     </div>
     <ul class="navbar-links">
+      <% if (activeLink === 'recipes') { %>
       <li>
         <a class="navbar-button" href="/recipes/new">Create Recipe</a>
       </li>
+      <% } else { %>
+        <li>
+          <a class="navbar-button" href="/recipes">Return Home</a>
+        </li>
+      <% } %>
       <% if (user) { %>
         <li>
           <form action="/logout" method="POST">

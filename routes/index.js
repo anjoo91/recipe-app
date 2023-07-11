@@ -3,9 +3,15 @@ const router = express.Router();
 const passport = require('passport');
 const User = require('../models/user');
 
-// The root route renders the landing page
-router.get('/', function(req, res) {
-  res.render('index', { title: 'Recipe Sharing Web App' });
+// OAuth logout route
+router.post('/logout', function(req, res) {
+  req.session.destroy(function(err) {
+    if (err) {
+      console.error('Error destroying session:', err);
+    }
+    req.user = null; // Clear the user session
+    res.redirect('/');
+  });
 });
 
 // Google OAuth login route
@@ -33,10 +39,9 @@ router.get(
   }
 );
 
-// OAuth logout route
-router.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
+// The root route renders the landing page
+router.get('/', function(req, res) {
+  res.render('index', { title: 'Recipe Sharing Web App' });
 });
 
 module.exports = router;

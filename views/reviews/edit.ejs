@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Recipe Sharing App - Edit Review</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/reviewsEdit.css">
+  <script src="/javascripts/scripts.js"></script>
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'edit' }) %>
+
+  <div class="page-content">
+    <h1 class="edit-review-header">Edit Review</h1>
+
+    <form action="/recipes/<%= review.recipeId %>/reviews/<%= review._id %>?_method=PUT" method="POST">
+      <div class="form-group">
+        <label for="title">Review Title:</label>
+        <input type="text" id="title" name="title" value="<%= review.title %>" required>
+      </div>
+      <div class="form-group">
+        <label for="rating">Rating (out of 5):</label>
+        <input type="number" id="rating" name="rating" min="1" max="5" value="<%= review.rating %>" required>
+      </div>
+      <div class="form-group">
+        <label for="content">Review Content:</label>
+        <textarea id="content" name="content" required><%= review.content %></textarea>
+      </div>
+      <button class="submit-button" type="submit">Update Review</button>
+    </form>
+  </div>
+</body>
+</html>

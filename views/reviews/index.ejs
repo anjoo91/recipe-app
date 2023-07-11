@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Recipe Sharing App - Reviews</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/reviewsIndex.css">
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'reviews' }) %>
+
+  <div class="page-content">
+    <h1 class="reviews-header">Reviews</h1>
+
+    <% if (!user) { %>
+      <div class="alert">
+        <p>Please log in to edit or delete a review.</p>
+      </div>
+    <% } %>
+
+    <% if (reviews.length > 0) { %>
+      <div class="review-cards">
+        <% reviews.forEach(function(review) { %>
+          <div class="review-card">
+            <h3><%= review.title %></h3>
+            <p>Rating: <%= review.rating %></p>
+            <p><%= review.content %></p>
+            <% if (user && review.userId.toString() === user._id.toString()) { %>
+              <div class="review-actions">
+                <form class="review-edit-form" action="/recipes/<%= recipe._id %>/reviews/<%= review._id %>/edit" method="GET">
+                  <button type="submit" class="review-edit-button">Edit</button>
+                </form>
+                <form class="review-delete-form" action="/recipes/<%= recipe._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                  <button type="submit" class="review-delete-button">Delete</button>
+                </form>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No reviews found.</p>
+    <% } %>
+
+    <% if (user) { %>
+      <button class="create-review-button" onclick="location.href='/recipes/<%= recipe._id %>/reviews/new'">Create New Review</button>
+    <% } %>
+  </div>
+</body>
+</html>

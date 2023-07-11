@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Recipe Sharing App - New Review</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/reviewsNew.css">
+  <script src="/javascripts/scripts.js"></script>
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'new' }) %>
+
+  <div class="page-content">
+    <h1 class="new-review-header">Create New Review</h1>
+
+    <form action="/recipes/<%= recipe._id %>/reviews" method="POST">
+      <div class="form-group">
+        <label for="title">Review Title:</label>
+        <input type="text" id="title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="rating">Rating (out of 5):</label>
+        <input type="number" id="rating" name="rating" min="1" max="5" required>
+      </div>
+      <div class="form-group">
+        <label for="content">Review Content:</label>
+        <textarea id="content" name="content" required></textarea>
+      </div>
+      <button class="submit-button" type="submit">Create Review</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -10,6 +10,8 @@ router.get('/new', recipeCtrl.new);
 router.post('/', recipeCtrl.create);
 // Show Route 
 router.get('/:id', recipeCtrl.show);
+// Edit Route
+router.get('/:id/edit', recipeCtrl.edit);
 // Delete Route
 router.delete('/:id', recipeCtrl.delete);
 

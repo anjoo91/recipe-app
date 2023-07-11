@@ -1,19 +1,20 @@
-// controllers/recipes.js
-
 const Recipe = require('../models/recipe');
 
 module.exports = {
-  index: index,
+  index,
   new: newRecipe,
-  create: create,
-  show: show,
+  create,
+  show,
+  edit,
   delete: deleteRecipe
 };
 
+// render all recipes
 function index(req, res, next) {
-  // pull all recipes
+  // pull all recipes from the db
   Recipe.find({})
     .then(function(recipes) {
+      // render the 'recipes/index' & pass recipe data
       res.render('recipes/index', { recipes: recipes });
     })
     .catch(function(err) {
@@ -22,31 +23,49 @@ function index(req, res, next) {
     });
 }
 
+// render form for new recipes
 function newRecipe(req, res, next) {
   res.render('recipes/new');
 }
 
-function create(req, res, next) {
-  // create a new recipe from req.body
-  Recipe.create(req.body)
-    .then(function(recipe) {
-      console.log('New recipe created:', recipe);
-      res.redirect('/recipes');
-    })
-    .catch(function(err) {
-      console.log(err);
-      next(err);
+// create new recipe
+async function create(req, res) {
+  try {
+    const { recipeName, ingredients, instructions, image } = req.body;
+
+    // user ID assigned to recipe
+    const userId = req.user._id;
+
+    const newRecipe = new Recipe({
+      userId: userId,
+      recipeName: recipeName,
+      ingredients: ingredients,
+      instructions: instructions,
+      image: image,
     });
+
+    await newRecipe.save();
+
+    // redirect to the '/recipes' page after successful creation of recipe
+    res.redirect('/recipes');
+  } catch (error) {
+    console.error(error);
+    // redirect to the '/recipes/new' page if an error occurs
+    res.redirect('/recipes/new');
+  }
 }
 
+// render details of a recipe
 function show(req, res, next) {
-  // find recipe._id in db
+  // identify the recipe based on ID in the db
   Recipe.findById(req.params.id)
     .then(function(recipe) {
       if (!recipe) {
         console.log('Recipe not found.');
+        // 404 status and error message if the recipe is not found
         res.status(404).send('Recipe not found.');
       } else {
+        // render 'recipes/show' and pass recipe data
         res.render('recipes/show', { recipe: recipe });
       }
     })
@@ -56,11 +75,33 @@ function show(req, res, next) {
     });
 }
 
+// render form to edit recipe
+function edit(req, res, next) {
+  // identify the recipe based on ID in the database
+  Recipe.findById(req.params.id)
+    .then(function(recipe) {
+      if (!recipe) {
+        console.log('Recipe not found.');
+        // 404 status and error message if the recipe is not found
+        res.status(404).send('Recipe not found.');
+      } else {
+        // render 'recipes/edit' and pass recipe data
+        res.render('recipes/edit', { recipe: recipe });
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+      next(err);
+    });
+}
+
+// delete a recipe
 function deleteRecipe(req, res, next) {
-  // find recipe._id and delete from db
+  // identify recipe based on ID and delete it from db
   Recipe.findByIdAndDelete(req.params.id)
     .then(function() {
       console.log('Recipe deleted.');
+      // redirect to the '/recipes' page after successful deletion of recipe
       res.redirect('/recipes');
     })
     .catch(function(err) {

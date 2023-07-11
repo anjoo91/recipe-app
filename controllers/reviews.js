@@ -1,50 +1,123 @@
+const Recipe = require('../models/recipe');
 const Review = require('../models/review');
 
 module.exports = {
-    index: review,
-    show: reviewShow,
-    create: reviewCreate,
+  index,
+  new: newReview,
+  create,
+  delete: deleteReview,
+  edit: editReview,
+  update: updateReview
 };
 
-// Render reviews for a recipe
-function review(req, res, next) {
-  const recipeId = req.params.id;
-  Review.find({ recipeId })
-    .sort({ timestamp: -1 }) // Sort reviews in desc order based on timestamp
-    .then((reviews) => {
-      res.render('reviews', { reviews }); // Render reviews/index.ejs
-    })
-    .catch((err) => next(err));
-}
-
-// Render review form
-function reviewShow(req, res, next) {
-  if (!req.user) {
-    return res.redirect('/login');
+// render reviews for a recipe
+async function index(req, res, next) {
+  try {
+    const reviews = await Review.find({});
+    const recipe = await Recipe.findById(req.params.id);
+    res.render('reviews/index', { reviews, recipe });
+  } catch (err) {
+    console.log(err);
+    next(err);
   }
-  res.render('reviewForm'); // Render review/new.ejs
-}
+};
 
-// Review creation
-function reviewCreate(req, res, next) {
-  if (!req.user) {
-    return res.redirect('/login');
+// render form to create review
+async function newReview(req, res, next) {
+  try {
+    const recipe = await Recipe.findById(req.params.id);
+    res.render('reviews/new', { recipe });
+  } catch (err) {
+    console.log(err);
+    next(err);
   }
+};
 
-  const recipeId = req.params.id;
-  const { reviewContent } = req.body;
+// create a new review
+async function create(req, res) {
+  try {
+    const { title, rating, content } = req.body;
+    const userId = req.user._id;
+    const recipeId = req.params.id;
 
-  const review = new Review({
-    recipeId,
-    reviewContent,
-    userId: req.user._id, // Set 'userId' to current user ID
-  });
+    const newReview = new Review({
+      userId,
+      recipeId,
+      title,
+      rating,
+      content
+    });
 
-  review.save()
-    .then(() => {
-      res.redirect(`/recipes/${recipeId}`); // Redirect to recipe page after successful review
-    })
-    .catch((err) => next(err));
-}
+    await newReview.save();
 
+    res.redirect(`/recipes/${recipeId}/reviews`);
+  } catch (error) {
+    console.error(error);
+    res.redirect(`/recipes/${req.params.id}/reviews`);
+  }
+};
 
+// delete a review
+async function deleteReview(req, res, next) {
+  try {
+    const review = await Review.findById(req.params.reviewId);
+    const recipeId = req.params.id;
+
+    // check current user ID matches the review's user ID
+    if (review.userId.toString() === req.user._id.toString()) {
+      await Review.findByIdAndDelete(req.params.reviewId);
+      console.log('Review deleted.');
+      res.redirect(`/recipes/${recipeId}/reviews`);
+    } else {
+      // if user ID doesn't match, redirect with a msg
+      req.flash('error', 'You are not authorized to delete this review.');
+      res.redirect(`/recipes/${recipeId}/reviews`);
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+// render form to edit reviews
+async function editReview(req, res, next) {
+  try {
+    const review = await Review.findById(req.params.reviewId);
+    const recipeId = req.params.id;
+
+    // check if current user ID matches the review's user ID
+    if (review.userId.toString() === req.user._id.toString()) {
+      res.render('reviews/edit', { review, recipeId });
+    } else {
+      // if user ID doesn't match, redirect with a msg
+      req.flash('error', 'You are not authorized to edit this review.');
+      res.redirect(`/recipes/${recipeId}/reviews`);
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+// update a review
+async function updateReview(req, res, next) {
+  try {
+    const { title, rating, content } = req.body;
+    const reviewId = req.params.reviewId;
+    const recipeId = req.params.id;
+
+    // check if current user ID matches the review's user ID
+    if (review.userId.toString() === req.user._id.toString()) {
+      await Review.findByIdAndUpdate(reviewId, { title, rating, content });
+      console.log('Review updated.');
+      res.redirect(`/recipes/${recipeId}/reviews`);
+    } else {
+      // if user ID doesn't match, redirect with a msg
+      req.flash('error', 'You are not authorized to update this review.');
+      res.redirect(`/recipes/${recipeId}/reviews`);
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};

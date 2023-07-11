@@ -1,0 +1,38 @@
+<!-- views/recipes/show.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Recipe Sharing App - Recipe Details</title>
+  <!-- Include necessary CSS files -->
+  <link rel="stylesheet" type="text/css" href="/stylesheets/recipesShow.css">
+</head>
+<body>
+  <%- include('../partials/navbar', { activeLink: 'show'}) %>
+
+  <div class="page-content">
+    <h1 class="recipe-name"><%= recipe.recipeName %></h1>
+    <div class="recipe-details">
+      <div class="recipe-image">
+        <img src="<%= recipe.image %>" alt="<%= recipe.recipeName %>">
+      </div>
+      <div class="recipe-info">
+        <h3>Ingredients:</h3>
+        <p><%= recipe.ingredients %></p>
+        <h3>Instructions:</h3>
+        <p><%= recipe.instructions %></p>
+      </div>
+    </div>
+    <div class="buttons-container">
+      <a href="/recipes/<%= recipe._id %>/reviews" class="reviews-button">See Reviews</a>
+      <div class="edit-delete-buttons">
+        <a href="/recipes/<%= recipe._id %>/edit" class="edit-button">Edit Recipe</a>
+        <form action="/recipes/<%= recipe._id %>?_method=DELETE" method="POST">
+          <button type="submit" class="delete-button">Delete Recipe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
