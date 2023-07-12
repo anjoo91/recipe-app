@@ -37,6 +37,11 @@
 }
 
 /*CSS for content*/
+body {
+    background-image: url("https://i.postimg.cc/yNNS5QfL/summer-fruits-gif-preview.gif");
+    background-size: cover;
+}
+
 .page-content {
     text-align: center;
     padding-top: 20px;

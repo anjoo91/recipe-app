@@ -15,7 +15,7 @@
         <% recipes.forEach(function(recipe) { %>
           <div class="recipe-card">
             <img src="<%= recipe.image %>" alt="<%= recipe.name %>">
-            <h3><%= recipe.name %></h3>
+            <h3><%= recipe.recipeName %></h3>
             <a href="/recipes/<%= recipe._id %>">View Recipe</a>
           </div>
         <% }) %>
@@ -24,18 +24,5 @@
       <p>No recipes found.</p>
     <% } %>
   </div>
-
-  <script>
-    function getAverageRating(reviews) {
-      if (reviews.length === 0) {
-        return 'N/A';
-      }
-
-      const sum = reviews.reduce((total, review) => total + review.rating, 0);
-      const average = sum / reviews.length;
-
-      return average.toFixed(1);
-    }
-  </script>
 </body>
 </html>
