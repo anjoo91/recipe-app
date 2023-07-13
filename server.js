@@ -68,7 +68,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Mount routes
+// mount routes
 app.use('/', indexRoutes);
 app.use('/recipes', recipeRoutes);
 app.use('/recipes/:id/reviews', reviewRoutes);
@@ -77,6 +77,14 @@ app.use('/recipes/:id/questions', questionRoutes);
 // invalid request, send 404 page
 app.use(function(req, res) {
   res.status(404).send('Cant find that!');
+});
+
+//user not authorized, send 403 page
+app.use(function(req, res, next) {
+  if(req.isAuthenticated()) {
+    return next();
+  }
+  res.status(404).send("Unauthorized");
 });
 
 module.exports = app;
