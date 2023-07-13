@@ -31,7 +31,7 @@ require('./config/passport');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname + '/public')));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
@@ -52,7 +52,7 @@ app.use(passport.session());
 
 // Add this middleware BELOW passport middleware
 app.use(function (req, res, next) {
-  res.locals.user = req.user; // assinging a property to res.locals, makes that said property (user) availiable in every
+  res.locals.user = req.user; // assigning a property to res.locals, makes that said property (user) availiable in every
   // single ejs view
   next();
 });
