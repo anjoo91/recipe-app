@@ -85,8 +85,15 @@ function edit(req, res, next) {
         // 404 status and error message if the recipe is not found
         res.status(404).send('Recipe not found.');
       } else {
-        // render 'recipes/edit' and pass recipe data
-        res.render('recipes/edit', { recipe: recipe });
+        // check if the logged-in user is owner of recipe
+        if (recipe.userId.toString() !== req.user._id.toString()) {
+          console.log('Unauthorized access to edit recipe.');
+          // 403 status and error message if user is not authorized to edit recipe
+          res.status(403).send('Unauthorized');
+        } else {
+          // render 'recipes/edit' and pass recipe data
+          res.render('recipes/edit', { recipe: recipe });
+        }
       }
     })
     .catch(function(err) {
