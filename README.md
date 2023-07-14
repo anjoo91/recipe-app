@@ -1,9 +1,9 @@
 # Recipe Sharing App
 Cyclic: 
-    ![Cyclic](https://faithful-blue-poncho.cyclic.app)
+    https://faithful-blue-poncho.cyclic.app
 
 GitHub: 
-    ![GitHub](https://github.com/anjoo91/recipe-app)
+    https://github.com/anjoo91/recipe-app
 
 **About This Website:**
 
