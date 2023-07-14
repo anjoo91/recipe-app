@@ -1,6 +1,6 @@
 /* CSS for NavBar */
 .navbar {
-    background-color: #f8f8f8;
+    background-color: rgba(248, 248, 248, 0.2);
     padding: 10px;
     display: flex;
     justify-content: space-between;

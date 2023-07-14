@@ -1,6 +1,6 @@
 /* CSS for NavBar */
 .navbar {
-    background-color: #f8f8f8;
+    background-color: rgba(248, 248, 248, 0.2);
     padding: 10px;
     display: flex;
     justify-content: space-between;
@@ -37,6 +37,11 @@
   }
   
   /* Page content styles */
+  body {
+    background-image: url("https://i.postimg.cc/ZK9q1JnX/pin-on-animation.gif");
+    background-size: cover;
+  }
+
   .page-content {
     max-width: 800px;
     margin: 0 auto;

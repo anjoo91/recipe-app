@@ -1,35 +1,51 @@
-# passport-boilerplate
+# Recipe Sharing App
+Cyclic: 
+    ![Cyclic](https://faithful-blue-poncho.cyclic.app)
+
+GitHub: 
+    ![GitHub](https://github.com/anjoo91/recipe-app)
+
+**About This Website:**
+
+    A webapp designed for sharing recipes with other people.
+
+    It allows you to create, read, update, and delete recipes, depending on whether you are the author of the recipe. Recipes allow you to share ingredients, instructions, and a URL to images. You must first log in with Google to utilize the create, update, and delete functions. Read functionality does not require logging in. You may also ask questions on each recipe. You can also edit or delete your questions after creating them. The author of the recipe can provide their answers to these questions.
+
+    You can also leave a review. Similar to the questions, you can also edit or delete your review after you've created it.
+
+**Screenshots:**
+Landing Page: 
+    ![Landing Page](https://i.postimg.cc/m2yqwHNw/landing-page-recipe.png)
+
+Recipe Home Page:
+    ![Recipe Home Page](https://i.postimg.cc/hG2c3YL2/recipe-home-page.png)
+
+Question Page: 
+    ![Question Page](https://i.postimg.cc/3wvz2bLy/question-page.png)
+
+Review Page: 
+    ![Review Page](https://i.postimg.cc/j25X4Ds8/review-page-recipe.png)
+
+Recipe Detail Page:
+    ![Recipe Detail Page](https://i.postimg.cc/pLtG5Y9C/recipe-details-page.png)
 
 
-This is your passport boilerplate.
+**Technologies Used:**
+* HTML
+* CSS
+* Express.js
+* MongoDB
+* Node.js
+* Google oAuth
+* Cyclic
 
-## Setup 
-
-1. Clone the repo
-2. Rename the folder to your Project
-3. Delete the `.git` file, when you are in the root of the file, you can press `ls` and you should see a `.git` file, then go ahead and run `rm -rf .git`
+**Getting Started:**
+Log in to create, update, or delete any recipe, answer, or questions.
 
 
-#### Setup your git repo
-0. Setup your `.env` file and add all the things you need! (look at mongoose movies for reference!)
-1. in the project root `git init`
-2. `git add .` to add all the starter code
-3. `git commit -m "setup boilerplate"` 
-4. go to github and create your github and create a repo (Without a readme or liscense you can add that later!)
-5. copy the remote address
-6. In your terminal add the remote `git remote add origin yourGithubRepo'sAddressGoesHere`
-7. `git pull origin main` If a screen pulls up asking you to do something just press `:q` and then `enter` (thats vim btw :) )
-8. `git push origin main`
-
-#### Setup your login (THE APP WON'T WORK until you do, no VIEWS are setup, or the landing route)
-
-0. Setup your database connection string
-1. Then Setup Your User Model, 
-2. Follow the steps from the lesson plan to get your Google login credentials for your `.env` file (create the file if you haven't), or you can just copy the ones from earlier if you want to reuse them.
-3. Setup the Code in your config passport 
-4. Setup your callback routes in your `routes/index`
-5. Setup a view and test your login!
-
-#### Make a commit 
-
-```git commit -m "setup up oauth and User Model"```
+**Ice Box:**
+* Add links for where to buy ingredients. 
+* Add price for ingredients based on redirect link.
+* Add rating display on recipe cards & reviews
+* Add embedded video feature
+* Add photo album feature to reviews

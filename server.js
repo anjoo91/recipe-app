@@ -68,13 +68,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-//user not authorized, send 403 page
-app.use(function(req, res, next) {
-  if(req.isAuthenticated()) {
-    return next();
-  }
-  res.status(404).send("Unauthorized");
-});
+
 
 // mount routes
 app.use('/', indexRoutes);
@@ -85,6 +79,11 @@ app.use('/recipes/:id/questions', questionRoutes);
 // invalid request, send 404 page
 app.use(function(req, res) {
   res.status(404).send('Cant find that!');
+});
+
+// unauthorized user, send 403 page
+app.use(function(req, res) {
+  res.status(403).send('Unauthorized! Please Log In!');
 });
 
 module.exports = app;
