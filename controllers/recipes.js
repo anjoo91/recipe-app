@@ -6,6 +6,7 @@ module.exports = {
   create,
   show,
   edit,
+  update,
   delete: deleteRecipe
 };
 
@@ -101,6 +102,45 @@ function edit(req, res, next) {
       next(err);
     });
 }
+
+// Update recipe
+async function update(req, res, next) {
+  try {
+    const { recipeName, ingredients, instructions, image } = req.body;
+
+    const updatedRecipe = {
+      recipeName,
+      ingredients,
+      instructions,
+      image,
+    };
+
+    const recipe = await Recipe.findByIdAndUpdate(req.params.id, updatedRecipe, {
+      new: true,
+    });
+
+    if (!recipe) {
+      console.log('Recipe not found.');
+      // 404 status and error message if the recipe is not found
+      return res.status(404).send('Recipe not found.');
+    }
+
+    // Check if the logged-in user is the owner of the recipe
+    if (recipe.userId.toString() !== req.user._id.toString()) {
+      console.log('Unauthorized access to edit recipe.');
+      // 403 status and error message if the user is not authorized to edit the recipe
+      return res.status(403).send('Unauthorized');
+    }
+
+    console.log('Recipe updated.');
+    // Redirect to the recipe's show page after successful update
+    res.redirect(`/recipes/${recipe._id}`);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+}
+
 
 // delete a recipe
 function deleteRecipe(req, res, next) {

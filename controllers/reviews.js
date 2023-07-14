@@ -87,7 +87,7 @@ async function editReview(req, res, next) {
 
     // check if current user ID matches the review's user ID
     if (review.userId.toString() === req.user._id.toString()) {
-      res.render('reviews/edit', { review, recipeId });
+      res.render('reviews/edit', { review, recipe: review.recipeId });
     } else {
       // if user ID doesn't match, redirect with a msg
       req.flash('error', 'You are not authorized to edit this review.');
@@ -97,7 +97,8 @@ async function editReview(req, res, next) {
     console.log(err);
     next(err);
   }
-};
+}
+
 
 // update a review
 async function updateReview(req, res, next) {
@@ -105,6 +106,8 @@ async function updateReview(req, res, next) {
     const { title, rating, content } = req.body;
     const reviewId = req.params.reviewId;
     const recipeId = req.params.id;
+
+    const review = await Review.findById(reviewId);
 
     // check if current user ID matches the review's user ID
     if (review.userId.toString() === req.user._id.toString()) {
@@ -120,4 +123,5 @@ async function updateReview(req, res, next) {
     console.log(err);
     next(err);
   }
-};
+}
+

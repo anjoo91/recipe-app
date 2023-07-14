@@ -151,21 +151,23 @@ function submitAnswer(req, res, next) {
 function edit(req, res, next) {
   // identify question based on ID in the database
   Question.findById(req.params.id)
-    .then(function(question) {
+    .populate('recipeId') // populate recipe data
+    .then(function (question) {
       if (!question) {
         console.log('Question not found.');
         // 404 status and error message if the question is not found
         res.status(404).send('Question not found.');
       } else {
         // render 'questions/edit' and pass question data
-        res.render('questions/edit', { question: question });
+        res.render('questions/edit', { question: question, recipe: question.recipeId });
       }
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.log(err);
       next(err);
     });
 }
+
 
 
 // delete question
