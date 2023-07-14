@@ -13,14 +13,17 @@ module.exports = {
 // render reviews for a recipe
 async function index(req, res, next) {
   try {
-    const reviews = await Review.find({});
+    const reviews = await Review.find({ recipeId: req.params.id });
     const recipe = await Recipe.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).send('Recipe not found.');
+    }
     res.render('reviews/index', { reviews, recipe });
   } catch (err) {
     console.log(err);
     next(err);
   }
-};
+}
 
 // render form to create review
 async function newReview(req, res, next) {
@@ -60,22 +63,21 @@ async function create(req, res) {
 // delete a review
 async function deleteReview(req, res, next) {
   try {
-    const review = await Review.findById(req.params.reviewId);
-    const recipeId = req.params.id;
+    const { reviewId } = req.params;
+    const { user } = req;
 
-    // check current user ID matches the review's user ID
-    if (review.userId.toString() === req.user._id.toString()) {
-      await Review.findByIdAndDelete(req.params.reviewId);
-      console.log('Review deleted.');
-      res.redirect(`/recipes/${recipeId}/reviews`);
-    } else {
-      // if user ID doesn't match, redirect with a msg
-      req.flash('error', 'You are not authorized to delete this review.');
-      res.redirect(`/recipes/${recipeId}/reviews`);
+    // Check if the current user is the owner of the review
+    const review = await Review.findOneAndDelete({ _id: reviewId, userId: user._id });
+
+    // Check if the review exists
+    if (!review) {
+      return res.status(404).send('Review not found.');
     }
-  } catch (err) {
-    console.log(err);
-    next(err);
+
+    res.redirect(`/recipes/${review.recipeId}/reviews`);
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    res.status(500).send('An error occurred while deleting the review.');
   }
 };
 
@@ -83,45 +85,51 @@ async function deleteReview(req, res, next) {
 async function editReview(req, res, next) {
   try {
     const review = await Review.findById(req.params.reviewId);
-    const recipeId = req.params.id;
+    const { user } = req;
 
-    // check if current user ID matches the review's user ID
-    if (review.userId.toString() === req.user._id.toString()) {
-      res.render('reviews/edit', { review, recipe: review.recipeId });
-    } else {
-      // if user ID doesn't match, redirect with a msg
-      req.flash('error', 'You are not authorized to edit this review.');
-      res.redirect(`/recipes/${recipeId}/reviews`);
+    // Check if the review exists
+    if (!review) {
+      return res.status(404).send('Review not found.');
     }
-  } catch (err) {
-    console.log(err);
-    next(err);
+
+    // Check if the current user is the owner of the review
+    if (!user || review.userId.toString() !== user._id.toString()) {
+      return res.status(403).send('Unauthorized');
+    }
+
+    const recipe = await Recipe.findById(review.recipeId); // Fetch the associated recipe
+
+    res.render('reviews/edit', { review, recipe }); // Pass the recipe
+  } catch (error) {
+    console.error('Error editing review:', error);
+    res.status(500).send('An error occurred while editing the review.');
   }
 }
+
 
 
 // update a review
 async function updateReview(req, res, next) {
   try {
+    const { reviewId } = req.params;
     const { title, rating, content } = req.body;
-    const reviewId = req.params.reviewId;
-    const recipeId = req.params.id;
+    const { user } = req;
 
-    const review = await Review.findById(reviewId);
+    // Check if the current user is the owner of the review
+    const review = await Review.findOneAndUpdate(
+      { _id: reviewId, userId: user._id },
+      { $set: { title, rating, content } },
+      { new: true }
+    );
 
-    // check if current user ID matches the review's user ID
-    if (review.userId.toString() === req.user._id.toString()) {
-      await Review.findByIdAndUpdate(reviewId, { title, rating, content });
-      console.log('Review updated.');
-      res.redirect(`/recipes/${recipeId}/reviews`);
-    } else {
-      // if user ID doesn't match, redirect with a msg
-      req.flash('error', 'You are not authorized to update this review.');
-      res.redirect(`/recipes/${recipeId}/reviews`);
+    // Check if the review exists
+    if (!review) {
+      return res.status(404).send('Review not found.');
     }
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-}
 
+    res.redirect(`/recipes/${review.recipeId}/reviews`);
+  } catch (error) {
+    console.error('Error updating review:', error);
+    res.status(500).send('An error occurred while updating the review.');
+  }
+};

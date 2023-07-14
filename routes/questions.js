@@ -9,14 +9,16 @@ router.get('/new', questionCtrl.new);
 // Create route
 router.post('/', questionCtrl.create);
 // Show route
-router.get('/:id', questionCtrl.show);
+router.get('/:questionId', questionCtrl.show);
 // Answer route
-router.get('/:id/answer', questionCtrl.answer);
+router.get('/:questionId/answer', questionCtrl.answer);
 // Answer submit route
-router.post('/:id/answer', questionCtrl.submit);
+router.post('/:questionId/answer', questionCtrl.submit);
 // Edit route
-router.get('/:id/edit', questionCtrl.edit);
+router.get('/:questionId/edit', questionCtrl.edit);
+// Update route
+router.put('/:questionId', questionCtrl.update);
 // Delete route
-router.delete('/:id', questionCtrl.delete);
+router.delete('/:questionId', questionCtrl.delete);
 
 module.exports = router;

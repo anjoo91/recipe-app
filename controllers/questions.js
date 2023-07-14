@@ -8,43 +8,35 @@ module.exports = {
   show,
   answer,
   submit: submitAnswer,
-  edit,
+  edit: editQuestion,
+  update: updateQuestion,
   delete: deleteQuestion
 };
 
-// render all questions
-function index(req, res, next) {
-  Recipe.findById(req.params.id) // Find the recipe by ID
-    .then(function(recipe) {
-      Question.find({})
-        .then(function(questions) {
-          // render 'questions/index' & pass questions data and recipe
-          res.render('questions/index', { questions: questions, recipe: recipe });
-        })
-        .catch(function(err) {
-          console.log(err);
-          next(err);
-        });
-    })
-    .catch(function(err) {
-      console.log(err);
-      next(err);
-    });
+// Render all questions
+async function index(req, res, next) {
+  try {
+    const recipe = await Recipe.findById(req.params.id).exec(); // Find the recipe by ID
+    const questions = await Question.find({}).exec();
+    res.render('questions/index', { questions, recipe });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-// render form for new questions
-function newQuestion(req, res, next) {
-  Recipe.findById(req.params.id) // find recipe by ID
-    .then(function(recipe) {
-      res.render('questions/new', { recipe: recipe });
-    })
-    .catch(function(err) {
-      console.log(err);
-      next(err);
-    });
+// Render form for new questions
+async function newQuestion(req, res, next) {
+  try {
+    const recipe = await Recipe.findById(req.params.id).exec(); // Find the recipe by ID
+    res.render('questions/new', { recipe });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-// create question
+// Create question
 async function create(req, res) {
   try {
     const { question } = req.body;
@@ -59,131 +51,151 @@ async function create(req, res) {
 
     await newQuestion.save();
 
-    // redirect to '/recipes/:id/questions' after successful question creation
+    // Redirect to '/recipes/:id/questions' after successful question creation
     res.redirect(`/recipes/${recipeId}/questions`);
   } catch (error) {
     console.error(error);
-    // redirect to '/recipes/:id/questions/new' if an error occurs
+    // Redirect to '/recipes/:id/questions/new' if an error occurs
     res.redirect(`/recipes/${req.params.id}/questions/new`);
   }
 }
 
-// render details of a question
-function show(req, res, next) {
-  // identify question based on ID in the database
-  Question.findById(req.params.id)
-    .then(function(question) {
-      if (!question) {
-        console.log('Question not found.');
-        // 404 status and error message if the question is not found
-        res.status(404).send('Question not found.');
+// Render details of a question
+async function show(req, res, next) {
+  try {
+    const question = await Question.findById(req.params.id).exec(); // Identify question based on ID in the database
+
+    if (!question) {
+      console.log('Question not found.');
+      // 404 status and error message if the question is not found
+      res.status(404).send('Question not found.');
+    } else {
+      // Render 'questions/show' and pass question data
+      res.render('questions/show', { question });
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
+// Render form to answer question
+async function answer(req, res, next) {
+  try {
+    const question = await Question.findById(req.params.id).populate('recipeId').exec(); // Identify question based on ID in the database
+
+    if (!question) {
+      console.log('Question not found.');
+      // 404 status and error message if question not found
+      res.status(404).send('Question not found.');
+    } else {
+      // Check if user ID matches recipe user ID
+      if (req.user && req.user._id.toString() === question.recipeId.userId.toString()) {
+        // Render 'questions/answer' and pass question data
+        res.render('questions/answer', { question });
       } else {
-        // render 'questions/show' and pass question data
-        res.render('questions/show', { question: question });
+        console.log('Access denied.');
+        // 403 status and error message if access is denied
+        res.status(403).send('Access denied.');
       }
-    })
-    .catch(function(err) {
-      console.log(err);
-      next(err);
-    });
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-// render form to answer question
-function answer(req, res, next) {
-  // identify question based on ID in db
-  Question.findById(req.params.id)
-    .populate('recipeId') // populate recipe data
-    .then(function(question) {
-      if (!question) {
-        console.log('Question not found.');
-        // 404 status and error message if question not found
-        res.status(404).send('Question not found.');
-      } else {
-        // check if user ID matches recipe user ID
-        if (req.user && req.user._id.toString() === question.recipeId.userId.toString()) {
-          // render 'questions/answer' and pass question data
-          res.render('questions/answer', { question: question });
-        } else {
-          console.log('Access denied.');
-          // 403 status and error message if access is denied
-          res.status(403).send('Access denied.');
-        }
-      }
-    })
-    .catch(function(err) {
-      console.log(err);
-      next(err);
-    });
+// Submit answer for a question
+async function submitAnswer(req, res, next) {
+  try {
+    const questionId = req.params.id;
+    const answer = req.body.answer;
+
+    const question = await Question.findById(questionId).exec();
+
+    if (!question) {
+      // Question not found
+      return res.status(404).send('Question not found.');
+    }
+
+    question.answer = answer;
+
+    await question.save();
+
+    const recipeId = question.recipeId; // Recipe ID associated with the question
+    res.redirect(`/recipes/${recipeId}/questions/${questionId}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while submitting the answer.');
+  }
 }
 
+// Render form to edit a question
+async function editQuestion(req, res, next) {
+  try {
+    const question = await Question.findById(req.params.questionId).exec();
+    const { user } = req;
 
-// submit answer for a question
-function submitAnswer(req, res, next) {
-  const questionId = req.params.id;
-  const answer = req.body.answer;
+    // Check if the question exists
+    if (!question) {
+      return res.status(404).send('Question not found.');
+    }
 
-  Question.findById(questionId)
-    .then((question) => {
-      if (!question) {
-        // question not found
-        return res.status(404).send('Question not found.');
-      }
-      
-      question.answer = answer;
-      
-      question.save()
-        .then(() => {
-          const recipeId = question.recipeId; // recipe id associated with the question
-          res.redirect(`/recipes/${recipeId}/questions/${questionId}`);
-        })
-        .catch((err) => {
-          console.log(err);
-          next(err);
-        });
-    })
-    .catch((err) => {
-      console.log(err);
-      next(err);
-    });
+    // Check if the current user is the owner of the question
+    if (!user || question.userId.toString() !== user._id.toString()) {
+      return res.status(403).send('Unauthorized');
+    }
+
+    const recipe = await Recipe.findById(question.recipeId).exec();
+
+    res.render('questions/edit', { question, recipe });
+  } catch (error) {
+    console.error('Error editing question:', error);
+    res.status(500).send('An error occurred while editing the question.');
+  }
 }
 
-// render edit form
-function edit(req, res, next) {
-  // identify question based on ID in the database
-  Question.findById(req.params.id)
-    .populate('recipeId') // populate recipe data
-    .then(function (question) {
-      if (!question) {
-        console.log('Question not found.');
-        // 404 status and error message if the question is not found
-        res.status(404).send('Question not found.');
-      } else {
-        // render 'questions/edit' and pass question data
-        res.render('questions/edit', { question: question, recipe: question.recipeId });
-      }
-    })
-    .catch(function (err) {
-      console.log(err);
-      next(err);
-    });
+// Update a question
+async function updateQuestion(req, res, next) {
+  try {
+    const { questionId } = req.params;
+    const { question } = req.body;
+    const { user } = req;
+
+    // Check if the current user is the owner of the question
+    const updatedQuestion = await Question.findOneAndUpdate(
+      { _id: questionId, userId: user._id },
+      { $set: { question } },
+      { new: true }
+    ).exec();
+
+    // Check if the question exists
+    if (!updatedQuestion) {
+      return res.status(404).send('Question not found.');
+    }
+
+    res.redirect(`/recipes/${updatedQuestion.recipeId}/questions`);
+  } catch (error) {
+    console.error('Error updating question:', error);
+    res.status(500).send('An error occurred while updating the question.');
+  }
 }
 
+// Delete question
+async function deleteQuestion(req, res, next) {
+  try {
+    const questionId = req.params.id;
+    const deletedQuestion = await Question.findByIdAndRemove(questionId).exec();
 
+    if (!deletedQuestion) {
+      // Question not found
+      return res.status(404).send('Question not found.');
+    }
 
-// delete question
-function deleteQuestion(req, res, next) {
-  const questionId = req.params.id;
-  Question.findByIdAndRemove(questionId)
-    .then((deletedQuestion) => {
-      if (!deletedQuestion) {
-        // question not found
-        return res.status(404).send('Question not found.');
-      }
-      const recipeId = deletedQuestion.recipeId; // recipe id associated with deleted question
-      res.redirect(`/recipes/${recipeId}/questions`); // redirect to questions index page
-    })
-    .catch((err) => {
-      console.log(err);
-      next(err);
-    });
+    const recipeId = deletedQuestion.recipeId; // Recipe ID associated with deleted question
+    res.redirect(`/recipes/${recipeId}/questions`); // Redirect to questions index page
+  } catch (error) {
+    console.error('Error deleting question:', error);
+    res.status(500).send('An error occurred while deleting the question.');
+  }
 }

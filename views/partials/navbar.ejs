@@ -15,7 +15,7 @@
         <li>
           <a class="navbar-button" href="/recipes/<%= recipe._id %>/reviews ">Return to <%= recipe.recipeName %> reviews</a>
         </li>
-      <% } else if (activeLink === 'reviewsedit') {%>
+      <% } else if (activeLink === 'reviewsedit' && recipe) {%>
         <li>
           <a class="navbar-button" href="/recipes/<%= recipe._id %>/reviews">Return to <%= recipe.recipeName %> reviews</a>
         </li>
