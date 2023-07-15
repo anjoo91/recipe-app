@@ -17,7 +17,7 @@ router.post('/:questionId/answer', questionCtrl.submit);
 // Edit route
 router.get('/:questionId/edit', questionCtrl.edit);
 // Update route
-router.put('/:questionId', questionCtrl.update);
+router.post('/:questionId/update', questionCtrl.update);
 // Delete route
 router.delete('/:questionId', questionCtrl.delete);
 

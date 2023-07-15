@@ -11,7 +11,7 @@
   <div class="page-content">
     <h1 class="edit-question-header">Edit Question</h1>
 
-    <form action="/recipes/<%= question.recipeId %>/questions/<%= question._id %>" method="POST">
+    <form action="/recipes/<%= question.recipeId %>/questions/<%= question._id %>/update" method="POST">
       <div class="form-group">
         <label for="question">Question:</label>
         <textarea id="question" name="question" required><%= question.question %></textarea>
